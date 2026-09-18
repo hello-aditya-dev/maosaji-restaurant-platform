@@ -71,3 +71,6 @@ server.log
 !/.zscripts/generate-v2.ts
 *.pid
 tsconfig.tsbuildinfo
+# Cron/QA test screenshots
+qa-*.png
+*.qa.png
