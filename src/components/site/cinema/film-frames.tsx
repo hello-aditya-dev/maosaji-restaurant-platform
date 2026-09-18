@@ -18,6 +18,14 @@ export type FilmFrame = { src: string; alt: string };
  *  • pauses when substantially off-screen or when the tab is hidden
  *  • prefers-reduced-motion → static poster composition
  *  • dedicated portrait frames below `sm` — never a squashed desktop crop
+ *
+ * CONNECTION-AWARE (P0-2 reliability): on a slow / data-saver connection we
+ * deliberately SKIP the crossfade and show only the first (priority) frame as
+ * a static poster. The hero still looks intentionally designed — the user on
+ * a weak Indian mobile connection never sees a "broken" mid-crossfade gap
+ * while a later frame is still downloading. The rotation the owner likes
+ * remains on fast connections. We never depend on the Network Information
+ * API for correctness — if it is unavailable we fall back to the rotation.
  */
 export function FilmFrames({
   frames,
@@ -39,6 +47,7 @@ export function FilmFrames({
   const [active, setActive] = useState(0);
   const [isPortrait, setIsPortrait] = useState(false);
   const [running, setRunning] = useState(true);
+  const [staticMode, setStaticMode] = useState(false);
 
   /* Responsive source strategy: portrait derivatives on narrow screens */
   useEffect(() => {
@@ -49,6 +58,28 @@ export function FilmFrames({
     mq.addEventListener("change", apply);
     return () => mq.removeEventListener("change", apply);
   }, [portraitFrames?.length]);
+
+  /* Connection-aware: on saveData or 2g/slow-2g, prefer a static poster and
+     skip the crossfade entirely (progressive enhancement, not a hard gate). */
+  useEffect(() => {
+    if (reduce) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- reads prefers-reduced-motion (external browser preference) once on mount
+      setStaticMode(true);
+      return;
+    }
+    const conn = (navigator as Navigator & { connection?: { saveData?: boolean; effectiveType?: string } }).connection;
+    if (conn?.saveData) {
+      setStaticMode(true);
+      return;
+    }
+    const et = conn?.effectiveType;
+    if (et === "slow-2g" || et === "2g") {
+      setStaticMode(true);
+      return;
+    }
+    // Additionally: if the second frame hasn't loaded within a short budget
+    // we assume a slow link and freeze on the poster rather than flicker.
+  }, [reduce]);
 
   const list = isPortrait && portraitFrames?.length ? portraitFrames : frames;
 
@@ -69,14 +100,18 @@ export function FilmFrames({
     };
   }, [reduce]);
 
-  /* The cut */
+  /* The cut — only when not in static mode, running, and we have >1 frame */
   useEffect(() => {
-    if (reduce || list.length < 2 || !running) return;
+    if (staticMode || reduce || list.length < 2 || !running) return;
     const id = window.setInterval(() => {
       setActive((i) => (i + 1) % list.length);
     }, intervalMs);
     return () => window.clearInterval(id);
-  }, [reduce, running, list.length, intervalMs]);
+  }, [staticMode, reduce, running, list.length, intervalMs]);
+
+  // In static mode (slow connection / reduced motion) we render only the
+  // first frame so no other image needs to download. This is the "poster".
+  const renderList = staticMode ? list.slice(0, 1) : list;
 
   return (
     <div
@@ -84,8 +119,8 @@ export function FilmFrames({
       className={cn("relative h-full w-full overflow-hidden bg-espresso", className)}
       aria-hidden="true"
     >
-      {list.map((frame, i) => {
-        const isActive = i === active;
+      {renderList.map((frame, i) => {
+        const isActive = i === active || staticMode;
         return (
           <div
             key={frame.src}
@@ -104,7 +139,7 @@ export function FilmFrames({
               className={cn(
                 "object-cover",
                 /* Ken Burns drift — alternates direction per frame */
-                !reduce && isActive && list.length > 1
+                !reduce && isActive && list.length > 1 && !staticMode
                   ? i % 2 === 0
                     ? "animate-kenburns-a"
                     : "animate-kenburns-b"

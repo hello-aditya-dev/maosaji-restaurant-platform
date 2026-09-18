@@ -7,7 +7,9 @@ const nextConfig: NextConfig = {
   // Type errors fail the build (the project is kept tsc-clean — `bunx tsc --noEmit`).
   reactStrictMode: false,
   // The private preview proxy serves the dev server from a *.space-z.ai origin.
-  allowedDevOrigins: ["*.space-z.ai"],
+  // localhost / 127.0.0.1 added so headless browser audits (agent-browser) and
+  // local tooling don't get blocked cross-origin on /_next/* resources.
+  allowedDevOrigins: ["*.space-z.ai", "localhost", "127.0.0.1"],
 };
 
 export default nextConfig;

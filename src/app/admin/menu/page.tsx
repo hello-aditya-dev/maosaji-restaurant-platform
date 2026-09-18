@@ -835,6 +835,7 @@ export default function AdminMenuPage() {
                               )
                             }
                             disabled={busy}
+                            aria-label={`${item.isAvailable ? "Hide" : "Show"} ${item.name} on the public menu`}
                           />
                           <label
                             htmlFor={`available-${item.id}`}

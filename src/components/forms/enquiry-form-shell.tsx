@@ -65,7 +65,10 @@ export function EnquiryFormShell({
       setSubmitting(false);
       form.reset();
     } catch {
-      setFormError("Network problem — please check your connection and try again.");
+      // P0-2 reliability: on a network failure, preserve everything the user
+      // typed (do NOT reset the form) and surface a clear, retryable message
+      // that matches the Maosaji reliability-pass wording exactly.
+      setFormError("We couldn't send this yet. Check your connection and try again.");
       setSubmitting(false);
     }
   };
