@@ -9,7 +9,7 @@ import {
   SheetDescription,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { restaurant } from "@/config/restaurant";
+import { restaurant, locationLabel } from "@/config/restaurant";
 import { useSiteStore } from "@/lib/store";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -31,7 +31,7 @@ export type ItemSheetProps = {
 /** Short display name for an outlet slug ("svm" → "SVM"), config-driven. */
 function outletShortName(slug: string): string {
   const loc = restaurant.locations.find((l) => l.slug === slug);
-  if (loc) return loc.shortName ?? loc.name;
+  if (loc) return locationLabel(loc);
   return slug.replace(/-/g, " ").replace(/\b[a-z]/g, (c) => c.toUpperCase());
 }
 
@@ -213,7 +213,7 @@ export function ItemSheet({ item, categoryName, open, onOpenChange }: ItemSheetP
             {/* Order this item */}
             <div className="mt-6">
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink-soft">
-                Order this item — {selectedOutlet.shortName ?? selectedOutlet.name}
+                Order this item — {locationLabel(selectedOutlet)}
               </p>
               <div className="mt-2.5 grid grid-cols-1 gap-2 sm:grid-cols-2">
                 {selectedOutlet.ordering.zomato && (

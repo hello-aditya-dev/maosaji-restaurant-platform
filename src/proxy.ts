@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from "next/server";
  * PRIVATE CONCEPT safeguard — X-Robots-Tag on every response.
  * Remove only at authorized production launch (see PRODUCTION_HANDOFF.md).
  */
-export function middleware(request: NextRequest) {
+export default function proxy(request: NextRequest) {
   const response = NextResponse.next();
   response.headers.set("X-Robots-Tag", "noindex, nofollow, noarchive");
   return response;

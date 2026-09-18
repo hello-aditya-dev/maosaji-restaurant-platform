@@ -5,9 +5,15 @@
  * implement `supabase-provider.ts` against the same DataProvider interface
  * (schema/RLS notes live in PRODUCTION_HANDOFF.md). No UI changes needed.
  *
- * DEMO_MODE (default, active now): Prisma/SQLite server-persisted store.
+ * DEMO_MODE (default): server-persisted Prisma/SQLite store.
+ *
+ * DEMO_MODE_MEMORY (serverless fallback): when no database is available —
+ * e.g. a zero-config Vercel deploy whose filesystem is read-only — the
+ * platform degrades gracefully to an in-memory provider seeded with the
+ * same data. Every page and flow keeps working; data resets on cold starts.
  */
 import { demoProvider } from "./demo-provider";
+import { memoryProvider } from "./memory-provider";
 import type { DataProvider } from "./types";
 
 export function hasSupabaseCredentials(): boolean {
@@ -17,12 +23,30 @@ export function hasSupabaseCredentials(): boolean {
   );
 }
 
-export function getProvider(): DataProvider {
-  // Supabase provider is intentionally not wired until credentials exist —
-  // falling back to DEMO_MODE keeps the private demo fully functional.
-  return demoProvider;
+/**
+ * SQLite (file) persistence needs a writable local filesystem AND a
+ * configured DATABASE_URL. Serverless platforms (Vercel) have neither by
+ * default, so they run the in-memory demo mode instead of erroring.
+ */
+export function canUseSqlitePersistence(): boolean {
+  if (!process.env.DATABASE_URL) return false;
+  if (process.env.VERCEL === "1") return false; // read-only FS — no SQLite writes
+  return true;
 }
 
-export const backendMode: string = hasSupabaseCredentials() ? "SUPABASE" : "DEMO_MODE";
+let cachedProvider: DataProvider | null = null;
+
+export function getProvider(): DataProvider {
+  if (!cachedProvider) {
+    cachedProvider = canUseSqlitePersistence() ? demoProvider : memoryProvider;
+  }
+  return cachedProvider;
+}
+
+export const backendMode: string = hasSupabaseCredentials()
+  ? "SUPABASE"
+  : canUseSqlitePersistence()
+    ? "DEMO_MODE"
+    : "DEMO_MODE_MEMORY";
 
 export * from "./types";

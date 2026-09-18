@@ -85,8 +85,8 @@ export function LocationsChapter() {
                     <Reveal delay={0.15} className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
                       <TrackedAnchor
                         href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Maosaji ${loc.name}, ${loc.address}`)}`}
-                        event="directions_click"
-                        props={{ from: "homepage", location: loc.slug }}
+                        eventName="directions_click"
+                        payload={{ from: "homepage", location: loc.slug }}
                         className="group inline-flex items-center gap-3 font-serif text-lg font-medium text-ink transition-colors hover:text-brand"
                       >
                         Get directions

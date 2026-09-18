@@ -4,7 +4,7 @@ import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "rea
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Plus, Search, X } from "lucide-react";
-import { restaurant } from "@/config/restaurant";
+import { restaurant, locationLabel } from "@/config/restaurant";
 import { useSiteStore } from "@/lib/store";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -40,7 +40,7 @@ function titleCase(value: string): string {
 /** Short display name for an outlet slug, from the verified restaurant config. */
 function outletShortName(slug: string): string {
   const loc = restaurant.locations.find((l) => l.slug === slug);
-  return loc ? loc.shortName ?? loc.name : titleCase(slug);
+  return loc ? locationLabel(loc) : titleCase(slug);
 }
 
 /** Respect prefers-reduced-motion for programmatic scrolling. */

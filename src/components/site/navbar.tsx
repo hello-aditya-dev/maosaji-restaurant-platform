@@ -90,7 +90,8 @@ export function Navbar() {
           {/* Desktop nav */}
           <nav aria-label="Primary" className="hidden items-center gap-7 lg:flex">
             {restaurant.nav.slice(0, 5).map((item) => {
-              const active = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+              const href: string = item.href;
+              const active = pathname === href || (href !== "/" && pathname.startsWith(href));
               return (
                 <Link
                   key={item.href}

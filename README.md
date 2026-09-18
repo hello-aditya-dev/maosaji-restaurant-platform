@@ -39,20 +39,22 @@ A **private, non-commercial concept website** prepared for **Maosaji** (Bilaspur
 | Validation | Zod |
 | State | Zustand (client), server components + fetch (data) |
 
-### Backend mode: DEMO_MODE
+### Backend mode: DEMO_MODE (with graceful serverless fallback)
 No Supabase credentials are present in this environment, so the platform runs in **DEMO_MODE**: persistence is server-side via Prisma/SQLite (`db/custom.db`, auto-seeded on first request). The [`src/lib/data-provider/`](./src/lib/data-provider) abstraction mirrors a Supabase implementation — swapping backends requires no UI changes.
+
+When no database is available — e.g. a **zero-config Vercel deploy** — the platform automatically degrades to **DEMO_MODE_MEMORY**: the same seed data served from an in-memory provider. Every page and flow keeps working (forms, admin demo, analytics); data simply resets when the serverless instance cold-starts. No environment variables required.
 
 ---
 
 ## Quick start
 
 ```bash
-bun install          # or npm install
-bun run db:push      # create the SQLite schema (file:./db/custom.db)
+bun install          # or npm install (postinstall runs prisma generate)
+bun run db:push      # create the SQLite schema (file:../db/custom.db — see .env.example)
 bun run dev          # http://localhost:3000
 ```
 
-The database seeds itself on first request (29 menu items, 2 outlets, demo enquiries, one demo offer).
+The database seeds itself on first request (28 menu items, 2 outlets, demo enquiries, one demo offer). No `.env`? The app still runs — in in-memory demo mode.
 
 **Admin:** open `/admin` and sign in with the demo passcode `demo2026` (shown as a hint on the login page — this is a private demo; replace with real auth for production).
 
@@ -79,8 +81,9 @@ src/
     menu/ forms/ admin/ shared/ ui/
   config/            # restaurant.ts — THE brand identity file
   lib/
-    data-provider/   # DEMO_MODE provider (Supabase-swappable)
-    seed-data.ts     # demo menu (names follow public menu breadth; no invented prices)
+    data-provider/   # DEMO_MODE + memory providers (Supabase-swappable)
+    seed-constants.ts # demo menu (names follow public menu breadth; no invented prices)
+    seed-data.ts     # idempotent SQLite seeding
 prisma/              # generic schema
 build-pack/          # original requirements pack (source of truth)
 MEDIA_PLAN.md        # media inventory, provenance labels, storyboard
@@ -96,11 +99,30 @@ MEDIA_PLAN.md        # media inventory, provenance labels, storyboard
 ## Rebranding for another restaurant
 
 1. Edit `src/config/restaurant.ts` (name, city, eyebrow, locations, ordering links, theme)
-2. Edit `src/lib/seed-data.ts` (menu, demo content)
+2. Edit `src/lib/seed-constants.ts` (menu, demo content)
 3. Replace `public/images/` with real photography
 4. Run `bun run db:push` against a fresh database
 
 No component rewrites are required — the DB schema and components are brand-agnostic.
+
+## Deploying on Vercel
+
+The repo deploys on Vercel **with zero configuration** — no environment variables needed:
+
+1. Import the repository in the Vercel dashboard (framework auto-detected: Next.js)
+2. Deploy. `postinstall` runs `prisma generate`; the build type-checks clean.
+3. With no `DATABASE_URL`, the app runs in `DEMO_MODE_MEMORY` (in-memory, seeded) — every route, form and the admin demo work out of the box.
+
+Optional environment variables (Project → Settings → Environment Variables):
+
+| Variable | Effect |
+| --- | --- |
+| `DATABASE_URL` | Ignored on Vercel (read-only FS — SQLite can't persist); documented for parity |
+| `ADMIN_DEMO_PASSCODE` | Overrides the demo admin passcode (`demo2026`) |
+| `ADMIN_SESSION_SECRET` | Salt for the demo session token |
+| `NEXT_PUBLIC_SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` | Future Supabase mode (provider implementation required — see handoff docs) |
+
+For bare-metal/Docker instead of Vercel: `bun run build:standalone` produces a self-contained `.next/standalone` server.
 
 ## Production checklist (before any public launch)
 

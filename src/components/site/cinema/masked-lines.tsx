@@ -14,6 +14,7 @@ export function MaskedLines({
   as: Tag = "span",
   delay = 0,
   stagger = 0.12,
+  id,
 }: {
   lines: (string | React.ReactNode)[];
   className?: string;
@@ -21,11 +22,12 @@ export function MaskedLines({
   as?: "span" | "h1" | "h2" | "p" | "div";
   delay?: number;
   stagger?: number;
+  id?: string;
 }) {
   const reduce = useReducedMotion();
   if (reduce) {
     return (
-      <Tag className={cn("block", className)}>
+      <Tag id={id} className={cn("block", className)}>
         {lines.map((line, i) => (
           <span key={i} className={cn("block", lineClassName)}>
             {line}
@@ -35,7 +37,7 @@ export function MaskedLines({
     );
   }
   return (
-    <Tag className={cn("block", className)}>
+    <Tag id={id} className={cn("block", className)}>
       {lines.map((line, i) => (
         <span key={i} className="block overflow-hidden pb-[0.08em] -mb-[0.08em]">
           <motion.span

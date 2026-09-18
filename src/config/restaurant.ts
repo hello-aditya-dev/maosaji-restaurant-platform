@@ -130,3 +130,12 @@ export const restaurant = {
 
 export type RestaurantConfig = typeof restaurant;
 export type RestaurantLocation = (typeof restaurant.locations)[number];
+
+/**
+ * Display label for a location — shortName preferred, full name as fallback.
+ * The cast keeps the `??` fallback rebrand-safe: with `as const` config both
+ * locations have a shortName, but a rebranded location may omit it.
+ */
+export function locationLabel(loc: RestaurantLocation | null | undefined): string {
+  return (loc?.shortName as string | undefined) ?? loc?.name ?? "";
+}

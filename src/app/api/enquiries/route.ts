@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
     email: data.email || null,
     organization: data.type === "bulk_order" ? data.organization : null,
     locationSlug: data.locationSlug || null,
-    eventDate: data.eventDate || null,
+    eventDate: data.type === "contact" ? null : data.eventDate || null,
     guestCount: data.type === "celebration" ? data.guestCount : null,
     quantity: data.type === "bulk_order" ? data.quantity : null,
     budgetRange: data.budgetRange || null,

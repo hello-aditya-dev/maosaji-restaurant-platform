@@ -12,7 +12,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useSiteStore } from "@/lib/store";
-import { restaurant } from "@/config/restaurant";
+import { restaurant, locationLabel } from "@/config/restaurant";
 import { track } from "@/lib/analytics";
 import { VegBadge } from "@/components/shared/veg-badge";
 
@@ -38,7 +38,7 @@ export function OrderDrawer() {
     "",
     ...orderList.map((l) => `${l.qty} × ${l.name}`),
     "",
-    `Preferred outlet: ${loc.shortName ?? loc.name}`,
+    `Preferred outlet: ${locationLabel(loc)}`,
   ].join("\n");
 
   const copyMessage = async () => {
@@ -101,7 +101,7 @@ export function OrderDrawer() {
                         : "border-border bg-white text-ink-soft hover:border-brass"
                     }`}
                   >
-                    {l.shortName ?? l.name}
+                    {locationLabel(l)}
                     <span className="block text-[11px] font-normal text-ink-soft">{l.name}</span>
                   </button>
                 ))}
