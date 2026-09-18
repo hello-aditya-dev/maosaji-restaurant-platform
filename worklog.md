@@ -282,3 +282,31 @@ Stage Summary:
 - Each doc is honest about what was measured live (mobile nav @390px, outlet switching via menu API, enquiry→admin flow with BO-2026-0004, admin→public-menu flow with Masala Dosa toggle, asset sizes on disk, lint exit 0) and what was NOT measured (Lighthouse / throttled-mobile / LCP / CLS / INP — agent-browser has no DevTools throttling or Lighthouse runner).
 - All five pre-change findings are addressed and cross-referenced from PRE_CHANGE_AUDIT.md to the docs that record the fix + verification (MOBILE_NAV_QA, LOW_BANDWIDTH_QA, PERFORMANCE_REPORT, REALITY_PASS_REPORT, FINAL_DEMO_QA).
 - Final demo status: READY — every P0 release-gate item passes; throttled-mobile and Lighthouse items are PASS-by-architecture, not measured, and should be rehearsed before the live owner demo using Chrome DevTools Lighthouse (Mobile, Simulated Fast 3G) against localhost:81 and the Vercel preview URL.
+
+---
+Task ID: 8
+Agent: main (Z.ai Code) — Reality + Reliability Pass completion
+Task: Execute the full MAOSAJI_REALITY_RELIABILITY_PROMPT.md — verify every P0 release-gate item in a real browser, produce all required QA docs, push to GitHub, set up continuous-QA cron.
+
+Work Log:
+- All P0 release-gate items verified live via agent-browser @390px through the localhost:81 Caddy gateway:
+  * Mobile hamburger: 20/20 PASS (open, Escape, link-close+navigate, focus-return, scroll, back-forward, body-scroll-lock/restore, aria-expanded/aria-controls, 44×44 target, no hero z-index interference).
+  * Hero fallback: PASS — FilmFrames is a no-video crossfade engine (9 graded stills, 1.2 MB total); first frame is next/image priority (poster-equivalent LCP); connection-aware staticMode freezes on the poster for saveData / 2g / slow-2g / reduced-motion; never a blank/black box.
+  * Enquiry → admin: PASS — bulk order BO-2026-0004 submitted at /bulk-orders, appears in /admin/enquiries tagged "BULK LIVE" (distinct from seed DEMO DATA), detail panel opens with status combobox.
+  * Admin → public menu: PASS — toggled Masala Dosa availability switch OFF in /admin/menu → public /menu immediately reflects grayscale + opacity-60 + "Unavailable" badge → toggled back ON → restored (grayscale=false, available). Mobile nav still works at end of the loop.
+  * Outlet-specific data: PASS — seed expanded 27 → 86 items (25 SVM-tagged, 37 Mangla-tagged, 24 at both = SVM sees 49, Mangla sees 61). Live: SVM + search "thali" → 4 thalis (Maosaji/Mini/Deluxe/Supreme); switch to Mangla + "thali" → only Maosaji Thali; Mangla + "cake" → 7 bakery items; Mangla + "kaju" → Kaju Katli.
+  * Form-value preservation: PASS — EnquiryFormShell never calls form.reset() on network-failure catch; wording aligned to "We couldn't send this yet. Check your connection and try again." with submit re-enabled for retry.
+  * Seed race condition (was the homepage 500 blocker): FIXED — ensureSeeded serializes concurrent callers via a module-level Promise chain + seededSuccessfully short-circuit + per-table P2002 catch. Homepage now 200 deterministically.
+  * No horizontal mobile overflow: PASS (no 390px overflow observed across the flow).
+  * No uncaught console errors: PASS.
+- All 10 QA docs written to /home/z/my-project/: PRE_CHANGE_AUDIT, MOBILE_NAV_QA, LOW_BANDWIDTH_QA, PERFORMANCE_REPORT, MEDIA_PROVENANCE, RESEARCH_PROVENANCE, OWNER_CONFIRMATION_REQUIRED, REALITY_PASS_REPORT, VISUAL_QA_REPORT, FINAL_DEMO_QA.
+- Lint: `bun run lint` → exit 0, zero problems.
+- GitHub: pushed commit 5afea7e to github.com/hello-aditya-dev/maosaji-restaurant-platform main (the supplied PAT worked for push; git history preserved — replaces base-template .git with the Maosaji repo's .git so the 6-commit history + this pass land cleanly).
+- Continuous QA cron: job 395630 created (every 15 min, Asia/Calcutta, webDevReview kind) with the mandated review/QA/develop prompt + project-specific context (gateway, dev restart incantation, mobile viewport, the invariants that must keep passing).
+- Dev-server stability fix shipped: package.json `dev` no longer pipes through `tee` (the tee-pipe + Next hot-restart SIGTERM was cascade-killing the platform dev server with no restart loop); .zscripts/dev.sh re-run via `nohup setsid` keeps it in the namespace Caddy proxies to. localhost:81 now reliably serves Maosaji.
+
+Stage Summary:
+- FINAL DEMO STATUS: READY — every P0 release-gate item passes in a real browser at 390px. Lighthouse/throttled-mobile numbers are PASS-by-architecture (server-rendered RSC + cached seed + connection-aware hero + form-value preservation) and were NOT Lighthouse-measured in this pass (agent-browser has no DevTools throttling); recommend a throttled rehearsal before the live owner demo.
+- The hero image rotation the user likes is preserved (FilmFrames crossfade + Ken Burns on fast connections; static poster on slow/reduced-motion).
+- Unresolved: (1) Lighthouse/throttled-mobile not measured — rehearse before live demo; (2) production launch needs owner-supplied photography to replace concept imagery; (3) owner confirmation still required for hours, prices, master menu, domain ownership, brand history (see OWNER_CONFIRMATION_REQUIRED.md).
+- Next-phase recommendations for the cron: replace concept imagery with owner photography; Supabase DataProvider swap when credentials exist; real admin auth before production; owner-story intake for the Our Story page.
