@@ -1,0 +1,20 @@
+{
+  "package": "maosaji_zai_build_pack_2026-09-18",
+  "created": "2026-09-18",
+  "file_count": 12,
+  "files": [
+    "00_README.md",
+    "01_ZAI_MASTER_PROMPT.md",
+    "02_VERIFIED_FACTS.json",
+    "03_CONTENT_AND_DATA_RULES.md",
+    "04_SEED_DATA.json",
+    "05_ACCEPTANCE_TESTS.md",
+    "06_FINAL_AUDIT_PROMPT.md",
+    "07_DEMO_RUNBOOK.md",
+    "08_REBRAND_GUIDE.md",
+    "09_PRODUCTION_HANDOFF_CHECKLIST.md",
+    "SOURCE_CONTEXT_FULL.md",
+    "manifest.json"
+  ],
+  "purpose": "Private Maosaji sales-demo build source of truth and final QA gate"
+}

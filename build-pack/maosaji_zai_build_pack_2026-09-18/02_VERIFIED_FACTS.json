@@ -1,0 +1,137 @@
+{
+  "as_of": "2026-09-18",
+  "timezone": "Asia/Kolkata",
+  "facts": [
+    {
+      "key": "brand_svm",
+      "status": "verified_public_listing",
+      "value": "Maosaji (SVM)",
+      "source": "https://www.zomato.com/bilaspur/maosaji-svm-telipara/order",
+      "notes": "Current Zomato listing."
+    },
+    {
+      "key": "svm_address",
+      "status": "verified_public_listing",
+      "value": "Shrikant Verma Marg, Near Rama Magneto Mall, Telipara, Bilaspur",
+      "source": "https://www.zomato.com/bilaspur/maosaji-svm-telipara/order"
+    },
+    {
+      "key": "svm_zomato_delivery_rating_count",
+      "status": "time_sensitive_verified",
+      "value": "43.2K",
+      "source": "https://www.zomato.com/bilaspur/maosaji-svm-telipara/order",
+      "notes": "Use only in pitch/research context. Do not hard-code into customer website because it changes."
+    },
+    {
+      "key": "svm_zomato_delivery_rating",
+      "status": "time_sensitive_verified",
+      "value": "4.2",
+      "source": "https://www.zomato.com/bilaspur/maosaji-svm-telipara/order",
+      "notes": "Time-sensitive."
+    },
+    {
+      "key": "svm_public_phone_zomato",
+      "status": "verified_public_listing",
+      "value": "+91 91525 49189",
+      "source": "https://www.zomato.com/bilaspur/maosaji-svm-telipara/order",
+      "notes": "Do not assume this is the preferred official contact for the final production site without owner confirmation."
+    },
+    {
+      "key": "svm_swiggy_rating_count",
+      "status": "time_sensitive_verified",
+      "value": "11K+",
+      "source": "https://www.swiggy.com/city/bilaspur/maosaji-shrikant-verma-marg-talapara-rest157837",
+      "notes": "Use only in pitch/research context."
+    },
+    {
+      "key": "svm_swiggy_categories",
+      "status": "verified_public_listing",
+      "value": [
+        "Thalis",
+        "Sweets"
+      ],
+      "source": "https://www.swiggy.com/city/bilaspur/maosaji-shrikant-verma-marg-talapara-rest157837"
+    },
+    {
+      "key": "mangla_brand",
+      "status": "verified_public_listing",
+      "value": "Maosaji",
+      "source": "https://www.zomato.com/bilaspur/maosaji-narmada-nagar/order"
+    },
+    {
+      "key": "mangla_address",
+      "status": "verified_public_listing",
+      "value": "Maosaji Mangla Chowk, Mungeli Road, Bilaspur, Chhattisgarh",
+      "source": "https://www.zomato.com/bilaspur/maosaji-narmada-nagar/order"
+    },
+    {
+      "key": "mangla_zomato_delivery_rating_count",
+      "status": "time_sensitive_verified",
+      "value": "25.9K",
+      "source": "https://www.zomato.com/bilaspur/maosaji-narmada-nagar/order",
+      "notes": "Use only in pitch/research context."
+    },
+    {
+      "key": "mangla_zomato_delivery_rating",
+      "status": "time_sensitive_verified",
+      "value": "4.3",
+      "source": "https://www.zomato.com/bilaspur/maosaji-narmada-nagar/order"
+    },
+    {
+      "key": "mangla_public_phone_zomato",
+      "status": "verified_public_listing",
+      "value": "+91 91119 74447",
+      "source": "https://www.zomato.com/bilaspur/maosaji-narmada-nagar/order",
+      "notes": "Confirm with owner before production."
+    },
+    {
+      "key": "mangla_swiggy_rating_count",
+      "status": "time_sensitive_verified",
+      "value": "4.2K+",
+      "source": "https://www.swiggy.com/city/bilaspur/maosaji-mangla-chowk-narmada-nagar-rest259175",
+      "notes": "Use only in pitch/research context."
+    },
+    {
+      "key": "public_menu_breadth",
+      "status": "verified_public_listing",
+      "value": [
+        "Thali",
+        "North Indian",
+        "South Indian",
+        "Chinese",
+        "Rice and Biryani",
+        "Pizza and Pasta",
+        "Burgers and Sandwiches",
+        "Snacks and Chaat",
+        "Mixture and Namkeen",
+        "Dry Fruits",
+        "Cookies",
+        "Desserts and Beverages",
+        "Cakes and Pastries",
+        "Sweets"
+      ],
+      "source": "https://www.zomato.com/bilaspur/maosaji-svm-telipara/menu",
+      "notes": "Categories vary by outlet and over time."
+    },
+    {
+      "key": "maosajisvm_domain_status",
+      "status": "verified_technical_check",
+      "value": "https://maosajisvm.com returned HTTP 502 Bad Gateway during check",
+      "checked_on": "2026-09-18",
+      "notes": "This proves only that the site failed during this check. Do NOT claim the site is permanently down or infer who owns/manages the domain."
+    }
+  ],
+  "explicitly_unverified_do_not_claim": [
+    "Founding year / 'Since 1917'",
+    "Founder or family history",
+    "Ownership of maosajisvm.com",
+    "Ownership of maosajisweets.com",
+    "Official primary domain",
+    "Exact current opening hours for every outlet unless rechecked or confirmed by owner",
+    "Any Google Maps review count unless Zai independently verifies it immediately before use",
+    "Any customer testimonial not sourced and approved",
+    "Any revenue, order volume, conversion rate, ROI, commission savings, or sales uplift",
+    "Exact prices unless pulled from a current public source and still labelled demo/reference until confirmed by owner",
+    "Jain availability, allergen claims, nutrition claims, FSSAI claims, or delivery radius without confirmation"
+  ]
+}

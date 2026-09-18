@@ -1,0 +1,156 @@
+{
+  "mode": "PRIVATE_DEMO",
+  "restaurant": {
+    "slug": "maosaji",
+    "display_name": "Maosaji",
+    "tagline": "A Bilaspur favourite, served every day.",
+    "eyebrow": "RESTAURANT • SWEETS • BAKERY • NAMKEEN",
+    "is_official": false,
+    "demo_disclaimer": "Private concept prepared for Maosaji. Not the official Maosaji website.",
+    "features": {
+      "sweets": true,
+      "bakery": true,
+      "bulk_orders": true,
+      "celebrations": true,
+      "multi_location": true,
+      "direct_checkout": false
+    }
+  },
+  "locations": [
+    {
+      "slug": "svm",
+      "name": "Srikant Verma Marg",
+      "address": "Shrikant Verma Marg, Near Rama Magneto Mall, Telipara, Bilaspur",
+      "phone_reference_only": "+91 91525 49189",
+      "hours": null,
+      "hours_status": "UNCONFIRMED_IN_PRODUCTION",
+      "ordering": {
+        "zomato": "https://www.zomato.com/bilaspur/maosaji-svm-telipara/order",
+        "swiggy": "https://www.swiggy.com/city/bilaspur/maosaji-shrikant-verma-marg-talapara-rest157837"
+      }
+    },
+    {
+      "slug": "mangla",
+      "name": "Mangla Chowk",
+      "address": "Maosaji Mangla Chowk, Mungeli Road, Bilaspur, Chhattisgarh",
+      "phone_reference_only": "+91 91119 74447",
+      "hours": null,
+      "hours_status": "UNCONFIRMED_IN_PRODUCTION",
+      "ordering": {
+        "zomato": "https://www.zomato.com/bilaspur/maosaji-narmada-nagar/order",
+        "swiggy": "https://www.swiggy.com/city/bilaspur/maosaji-mangla-chowk-narmada-nagar-rest259175"
+      }
+    }
+  ],
+  "menu_categories": [
+    "Popular",
+    "Thali",
+    "North Indian",
+    "South Indian",
+    "Chinese",
+    "Chaat & Snacks",
+    "Sweets",
+    "Bakery & Cakes",
+    "Namkeen",
+    "Beverages"
+  ],
+  "demo_menu_items": [
+    {
+      "name": "Maosaji Thali",
+      "category": "Thali",
+      "price": null,
+      "vegetarian": true,
+      "featured": true
+    },
+    {
+      "name": "Masala Dosa",
+      "category": "South Indian",
+      "price": null,
+      "vegetarian": true,
+      "featured": true
+    },
+    {
+      "name": "Maosaji Special Dosa",
+      "category": "South Indian",
+      "price": null,
+      "vegetarian": true,
+      "featured": true
+    },
+    {
+      "name": "Plain Dosa",
+      "category": "South Indian",
+      "price": null,
+      "vegetarian": true,
+      "featured": false
+    },
+    {
+      "name": "Chole Bhature",
+      "category": "Chaat & Snacks",
+      "price": null,
+      "vegetarian": true,
+      "featured": true
+    },
+    {
+      "name": "Pav Bhaji",
+      "category": "Chaat & Snacks",
+      "price": null,
+      "vegetarian": true,
+      "featured": true
+    },
+    {
+      "name": "Kachori Chaat",
+      "category": "Chaat & Snacks",
+      "price": null,
+      "vegetarian": true,
+      "featured": false
+    },
+    {
+      "name": "Paneer Butter Masala",
+      "category": "North Indian",
+      "price": null,
+      "vegetarian": true,
+      "featured": true
+    },
+    {
+      "name": "Veg Manchurian",
+      "category": "Chinese",
+      "price": null,
+      "vegetarian": true,
+      "featured": false
+    },
+    {
+      "name": "Nariyal Barfi",
+      "category": "Sweets",
+      "price": null,
+      "vegetarian": true,
+      "featured": true
+    },
+    {
+      "name": "Black Forest Pastry",
+      "category": "Bakery & Cakes",
+      "price": null,
+      "vegetarian": true,
+      "featured": true
+    },
+    {
+      "name": "Chocolate Chip Cookies",
+      "category": "Bakery & Cakes",
+      "price": null,
+      "vegetarian": true,
+      "featured": false
+    }
+  ],
+  "demo_enquiries": [
+    {
+      "type": "bulk_order",
+      "organisation": "Demo Company",
+      "contact_name": "Demo Customer",
+      "phone": "0000000000",
+      "quantity": "200 gift boxes",
+      "occasion": "Corporate gifting",
+      "required_date": "2026-10-15",
+      "status": "NEW",
+      "demo_data": true
+    }
+  ]
+}

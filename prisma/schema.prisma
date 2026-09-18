@@ -1,0 +1,114 @@
+// Restaurant Platform v1 — generic, brand-agnostic schema.
+// Maosaji is DATA, not structure. A rebrand must never require schema renames.
+// NOTE: SQLite/Prisma primitives cannot be lists — JSON arrays are stored as JSON strings.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Location {
+  id           String   @id @default(cuid())
+  slug         String   @unique
+  name         String
+  address      String
+  phone        String? // public reference only; owner confirmation required for production
+  hoursNote    String? // null => unconfirmed, must NOT be guessed
+  orderingJson String   @default("{}") // { zomato?, swiggy? }
+  galleryJson  String   @default("[]") // image paths
+  active       Boolean  @default(true)
+  displayOrder Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model MenuCategory {
+  id           String  @id @default(cuid())
+  slug         String  @unique
+  name         String
+  displayOrder Int     @default(0)
+}
+
+model MenuItem {
+  id            String   @id @default(cuid())
+  slug          String   @unique
+  name          String
+  description   String?
+  categorySlug  String
+  priceCents    Int? // null => unverified, show "Price available on ordering partner"
+  isVegetarian  Boolean  @default(true)
+  isAvailable   Boolean  @default(true)
+  isFeatured    Boolean  @default(false)
+  locationSlugs String   @default("[]") // JSON array of location slugs; empty => all
+  imageUrl      String?
+  displayOrder  Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([categorySlug])
+  @@index([isAvailable])
+}
+
+model Enquiry {
+  id              String   @id @default(cuid())
+  referenceNumber String   @unique
+  type            String // celebration | bulk_order | cake | contact
+  contactName     String
+  phone           String
+  email           String?
+  organization    String?
+  locationSlug    String?
+  eventDate       String?
+  guestCount      Int?
+  quantity        String?
+  budgetRange     String?
+  requirementsJson String? // JSON array (multi-select)
+  cakeType        String?
+  cakeWeight      String?
+  cakeMessage     String?
+  message         String?
+  status          String   @default("NEW") // NEW | CONTACTED | QUALIFIED | QUOTED | WON | LOST
+  source          String   @default("website")
+  isDemoData      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([type])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Offer {
+  id          String   @id @default(cuid())
+  title       String
+  headline    String?
+  description String?
+  ctaLabel    String?
+  ctaHref     String?
+  imageSlug   String?
+  startsAt    DateTime @default(now())
+  endsAt      DateTime
+  active      Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model SiteSetting {
+  key       String   @id
+  valueJson String
+  updatedAt DateTime @updatedAt
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  name      String
+  payloadJson String?
+  createdAt DateTime @default(now())
+
+  @@index([name])
+  @@index([createdAt])
+}

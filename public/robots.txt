@@ -1,0 +1,4 @@
+# PRIVATE CONCEPT — do not invite indexing.
+# Remove only at authorized production launch (09_PRODUCTION_HANDOFF_CHECKLIST.md).
+User-agent: *
+Disallow: /
