@@ -156,6 +156,7 @@ export function Navbar() {
   ];
 
   return (
+    <>
     <header
       className={cn(
         "fixed inset-x-0 top-0 z-50 transition-all duration-500",
@@ -273,8 +274,15 @@ export function Navbar() {
           </div>
         </div>
       </div>
+    </header>
 
-      {/* Mobile drawer */}
+      {/* Mobile drawer — rendered OUTSIDE the <header> so the header's
+          `backdrop-blur-md` (which creates a containing block for fixed
+          descendants per CSS spec) does NOT collapse this fixed dialog to
+          height 0. With the viewport as its containing block, `top-16 +
+          bottom-0` correctly resolves to height = 100svh − 4rem. The explicit
+          `h-[calc(...)]` is a belt-and-suspenders fallback. z-40 stays below
+          the z-50 header so the hamburger/X button remains clickable. */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -289,7 +297,7 @@ export function Navbar() {
             animate={{ opacity: 1 }}
             exit={reduceMotion ? undefined : { opacity: 0 }}
             transition={{ duration: 0.22 }}
-            className="fixed inset-x-0 bottom-0 top-16 z-40 overflow-y-auto bg-ivory grain lg:hidden"
+            className="fixed inset-x-0 bottom-0 top-16 z-40 h-[calc(100svh-4rem)] overflow-y-auto bg-ivory grain lg:hidden"
           >
             <nav aria-label="Mobile" className="flex flex-col px-6 py-6">
               {mobileNavItems.map((item, i) => (
@@ -314,6 +322,6 @@ export function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 }

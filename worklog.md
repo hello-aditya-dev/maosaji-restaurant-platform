@@ -310,3 +310,22 @@ Stage Summary:
 - The hero image rotation the user likes is preserved (FilmFrames crossfade + Ken Burns on fast connections; static poster on slow/reduced-motion).
 - Unresolved: (1) Lighthouse/throttled-mobile not measured — rehearse before live demo; (2) production launch needs owner-supplied photography to replace concept imagery; (3) owner confirmation still required for hours, prices, master menu, domain ownership, brand history (see OWNER_CONFIRMATION_REQUIRED.md).
 - Next-phase recommendations for the cron: replace concept imagery with owner photography; Supabase DataProvider swap when credentials exist; real admin auth before production; owner-story intake for the Our Story page.
+
+---
+Task ID: 9
+Agent: main (Z.ai Code) — webDevReview cron round
+Task: Continuous QA round. Verify invariants; fix the mobile hamburger if needed (user reported it must open FULLY without any problem); correct the git author email to hi.aditya.dev@gmail.com.
+
+Work Log:
+- Reviewed worklog Tasks 0–8. All P0 release-gate items were reported PASS in Task 8. This round re-verified invariants live via agent-browser @390px through the localhost:81 gateway.
+- CRITICAL BUG FOUND + FIXED: the mobile hamburger drawer was NOT actually opening visually. Symptom: `aria-expanded=true` was set and the 9 links had getBoundingClientRect positions, BUT the dialog container computed `height:0px` with `bottom:64` (should be `bottom:780`). VLM screenshot analysis confirmed the drawer was completely invisible — the homepage hero was showing, not the drawer.
+- ROOT CAUSE: the mobile `<AnimatePresence><motion.div>` drawer was rendered INSIDE the `<header>` element. The header's solid-state class `bg-ivory/92 backdrop-blur-md` applies `backdrop-filter: blur(12px)`. Per CSS spec, `backdrop-filter` creates a NEW CONTAINING BLOCK for fixed-position descendants. So when the drawer opened (which sets `solid=true` → header gains backdrop-blur), the fixed dialog's `top:16rem; bottom:0` resolved relative to the 64px-tall header instead of the viewport → dialog height = 64−64 = 0. The dialog rendered at zero height with `overflow-y:auto`, and the browser's focus-into-view auto-scrolled it uselessly. The links' getBoundingClientRect returned logical positions but they were clipped by the zero-height container.
+- FIX (src/components/site/navbar.tsx): moved the `<AnimatePresence>` drawer OUTSIDE the `<header>` element (now a sibling in a `<>` fragment), so the header's `backdrop-blur-md` is no longer an ancestor and the dialog's containing block reverts to the viewport. Also added an explicit `h-[calc(100svh-4rem)]` as a belt-and-suspenders fallback so the dialog always has a defined height regardless of any containing-block shenanigans. z-40 (drawer) stays below z-50 (header) so the hamburger/X button stays clickable.
+- VERIFIED LIVE @360/375/390/412px: dialog now reports `h:716, top:64, bottom:780, clientHeight:716` (was h:0). All 9 links (Menu, Sweets, Bakery, Celebrations, Bulk Orders, Our Story, Locations, Gallery, Contact) visible with last link bottom=637 (in 780 viewport). VLM screenshot analysis confirms: "full-screen drawer visible filling area below top header; all 9 links in order; warm cream/ivory background; no clipping/cut-off." Full contract re-passes: open→body overflow=hidden; Escape→aria-expanded=false+body overflow restored; no horizontal overflow at any width.
+- Git identity corrected: the user clarified the email is `hi.aditya.dev@gmail.com` (not `hi.dev.aditya@gmail.com` as previously set). Updated both global (`git config --global user.email`) and local repo config. Last commit author verified as `hello-aditya-dev <hi.aditya.dev@gmail.com>`.
+- Lint: `bun run lint` → exit 0.
+
+Stage Summary:
+- Mobile hamburger: now genuinely opens FULLY at 360/375/390/412px (was visually broken due to the backdrop-blur containing-block collapse). This was a P0 release-blocker hiding behind a passing `aria-expanded` state — caught by combining getBoundingClientRect geometry checks with a VLM screenshot analysis.
+- Git author/email: `hello-aditya-dev <hi.aditya.dev@gmail.com>` (global + local).
+- Next-phase recommendations: keep this drawer-outside-header pattern for any future fixed overlay that must coexist with the backdrop-blur header; the `h-[calc(100svh-4rem)]` explicit-height pattern is the robust fallback for any fixed dialog.
