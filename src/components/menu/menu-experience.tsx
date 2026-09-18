@@ -16,6 +16,7 @@ import { PriceTag } from "@/components/shared/price-tag";
 import { AddToOrderButton } from "./add-to-order-button";
 import { EmptyMenuState } from "./empty-menu-state";
 import { ItemSheet } from "./item-sheet";
+import { ItemImage } from "./item-image";
 
 /**
  * Menu Centerpiece — instant search, sticky scroll-spy category rail,
@@ -84,24 +85,19 @@ function MenuCard({
         !item.isAvailable && "opacity-60"
       )}
     >
-      <div className="relative aspect-square overflow-hidden bg-cream">
-        {item.imageUrl && (
-          <Image
-            src={item.imageUrl}
-            alt={item.name}
-            fill
-            sizes={CARD_IMAGE_SIZES}
-            className={cn(
-              "object-cover transition-transform duration-200 group-hover:scale-[1.03]",
-              !item.isAvailable && "grayscale"
-            )}
-          />
-        )}
-        <span className="absolute left-2.5 top-2.5 rounded-full border border-border bg-ivory/90 px-2 py-0.5 text-[10px] font-medium text-ink-soft backdrop-blur-sm">
+      <div className="relative">
+        <ItemImage
+          src={item.imageUrl}
+          alt={item.name}
+          sizes={CARD_IMAGE_SIZES}
+          unavailable={!item.isAvailable}
+          className="group-hover:scale-[1.03] transition-transform duration-200"
+        />
+        <span className="absolute left-2.5 top-2.5 z-10 rounded-full border border-border bg-ivory/90 px-2 py-0.5 text-[10px] font-medium text-ink-soft backdrop-blur-sm">
           {categoryName}
         </span>
         {!item.isAvailable && (
-          <span className="absolute right-2.5 top-2.5 rounded-full border border-border bg-ivory/95 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-ink-soft">
+          <span className="absolute right-2.5 top-2.5 z-10 rounded-full border border-border bg-ivory/95 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-ink-soft">
             Unavailable
           </span>
         )}

@@ -329,3 +329,25 @@ Stage Summary:
 - Mobile hamburger: now genuinely opens FULLY at 360/375/390/412px (was visually broken due to the backdrop-blur containing-block collapse). This was a P0 release-blocker hiding behind a passing `aria-expanded` state — caught by combining getBoundingClientRect geometry checks with a VLM screenshot analysis.
 - Git author/email: `hello-aditya-dev <hi.aditya.dev@gmail.com>` (global + local).
 - Next-phase recommendations: keep this drawer-outside-header pattern for any future fixed overlay that must coexist with the backdrop-blur header; the `h-[calc(100svh-4rem)]` explicit-height pattern is the robust fallback for any fixed dialog.
+
+---
+Task ID: 10
+Agent: main (Z.ai Code) — webDevReview cron round (images)
+Task: Ensure every product image renders; add images to all items; perfect the image layout (no overflow, no broken images).
+
+Work Log:
+- AUDIT: 31 of 86 menu items had real images on disk; 55 had imageUrl:null showing an empty cream box (no placeholder). No broken references (all referenced paths existed). The user requirement: "images in each products" + "no bad looking images" + "no overflows".
+- GENERATED 55 new food photographs via z-ai-web-dev-sdk (scripts/generate-item-images.ts): per-item tailored prompts following the MEDIA_PLAN art direction — warm/natural for restaurant dishes, macro/deep-warm for sweets, light/clean for bakery, tall-glass/condensation for beverages. Each generated at 1024×1024, then converted PNG→JPEG via sharp (quality 85, mozjpeg) for ~50-200KB per image (matches the existing item-image budget). Atomic writes (tmp+rename) so a timeout mid-write never corrupts a file. Idempotent (skips existing). 86/86 item images now on disk (12MB total).
+- WIRED into seed-constants.ts: every item now has imageUrl="/images/items/<slug>.jpg" (was 0 null before → wait, 55 null → 0 null after the patch). Reset the SQLite DB so the new image URLs are picked up by the reseed (ensureSeeded only seeds empty tables). Verified via /api/menu: total=86, withImage=86, nullImage=0.
+- NEW COMPONENT src/components/menu/item-image.tsx — robust image rendering with graceful degradation: (1) square/landscape aspect via aspectClass prop, object-cover, overflow-hidden — never overflows; (2) shimmer gradient placeholder while the image streams in (no blank box); (3) onError → swaps to an elegant serif-initial tile on a cream/grain backdrop (premium printed-menu pattern) — never a broken-image icon; (4) when there is no imageUrl at all, the serif tile shows from the start (no flash of empty); (5) unavailable items get grayscale. Wired into menu-experience.tsx (square grid cards) + item-sheet.tsx (16/10 detail panel).
+- LAYOUT: menu card image block wrapped in a relative container so the category + Unavailable badges (z-10) position correctly above the image. Hover scale (group-hover:scale-[1.03]) now applies to the ItemImage container.
+- VERIFIED LIVE via agent-browser + VLM:
+  * Mobile 390px menu: cards show "real food photographs, crisp and well-framed, food filling the frame" — thali platters (Maosaji/Mini/Deluxe/Supreme), Paneer Butter Masala, Paneer Lababdar, Dal Makhni all with real photos. No broken-image icons, no gray boxes, no layout problems.
+  * Desktop 1280px menu: scrollWidth=1280=clientWidth → no horizontal overflow.
+  * Sweets page: 18 images, 14 loaded above-fold (lazy below).
+  * All 86 item images serve HTTP 200 image/jpeg, valid JPEG progressive 1024×1024; next/image optimize endpoint 200.
+- Lint: `bun run lint` → exit 0.
+
+Stage Summary:
+- Every product now has a real food photograph (86/86). The image layout is perfect: square aspect-square cards with object-cover + overflow-hidden, no horizontal overflow at 390px or 1280px. A robust ItemImage component ensures no broken-image icon ever appears (onError → elegant serif-initial fallback; shimmer while loading).
+- Next-phase recommendations: none blocking. Optional: for production, consider generating AVIF variants (next/image auto-serves AVIF/WebP where supported); replace concept imagery with owner-supplied outlet photography per MEDIA_PLAN.md §6.

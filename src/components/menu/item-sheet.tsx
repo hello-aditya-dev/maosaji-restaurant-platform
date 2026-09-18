@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Image from "next/image";
 import { Check, MapPin, Minus, Plus } from "lucide-react";
 import {
   Sheet,
@@ -10,6 +9,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { restaurant, locationLabel } from "@/config/restaurant";
+import { ItemImage } from "./item-image";
 import { useSiteStore } from "@/lib/store";
 import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
@@ -100,23 +100,21 @@ export function ItemSheet({ item, categoryName, open, onOpenChange }: ItemSheetP
       >
         <div className="pretty-scroll max-h-[86vh] overflow-y-auto pb-8 sm:h-full sm:max-h-none">
           {/* Image */}
-          <div className="relative aspect-[16/10] w-full shrink-0 overflow-hidden bg-cream">
-            {item.imageUrl && (
-              <Image
-                src={item.imageUrl}
-                alt={item.name}
-                fill
-                priority
-                sizes="(max-width: 640px) 100vw, 448px"
-                className={cn("object-cover", !item.isAvailable && "grayscale")}
-              />
-            )}
+          <div className="relative w-full shrink-0">
+            <ItemImage
+              src={item.imageUrl}
+              alt={item.name}
+              aspectClass="aspect-[16/10]"
+              sizes="(max-width: 640px) 100vw, 448px"
+              unavailable={!item.isAvailable}
+              priority
+            />
             <div
               aria-hidden="true"
               className="pointer-events-none absolute inset-x-0 top-0 h-16 bg-gradient-to-b from-black/30 to-transparent"
             />
             {!item.isAvailable && (
-              <span className="absolute right-3 top-3 rounded-full border border-border bg-ivory/95 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-ink-soft">
+              <span className="absolute right-3 top-3 z-10 rounded-full border border-border bg-ivory/95 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-ink-soft">
                 Unavailable
               </span>
             )}
