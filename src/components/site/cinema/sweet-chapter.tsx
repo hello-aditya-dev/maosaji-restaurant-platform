@@ -18,7 +18,7 @@ const RAIL = [
   { src: "/images/sweet/rail-katli.jpg", name: "Kaju Katli", note: "Silver-leaf cashew diamonds" },
   { src: "/images/sweet/rail-laddoo.jpg", name: "Motichoor Laddoo", note: "Fine boondi, pistachio" },
   { src: "/images/sweet/rail-barfi.jpg", name: "Pista Barfi", note: "Layered, saffron-kissed" },
-  { src: "/images/sweet/rail-jamun.jpg", name: "Gulab Jamun", note: "Saffron syrup, still warm" },
+  { src: "/images/sweet/rail-jamun.jpg", name: "Gulab Jamun", note: "In saffron syrup" },
 ];
 
 export function SweetChapter() {
@@ -28,7 +28,7 @@ export function SweetChapter() {
   const drift = useTransform(scrollYProgress, [0, 1], ["3%", "-16%"]);
 
   return (
-    <section aria-labelledby="sweet-heading" className="relative overflow-hidden bg-espresso py-24 sm:py-32">
+    <section aria-labelledby="sweet-heading" className="relative overflow-hidden bg-espresso py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
         <div className="flex flex-wrap items-end justify-between gap-8">
           <div>
@@ -79,9 +79,9 @@ export function SweetChapter() {
             <div>
               <Reveal>
                 <p className="max-w-md text-[15px] leading-relaxed text-parchment/85">
-                  Mithai made the slow way — set in trays, cut by hand, finished
-                  with silver leaf and crushed pistachio. Boxed for festivals,
-                  weddings, or simply because Thursday asked for it.
+                  Mithai, gifting and familiar favourites — barfi, laddoo and
+                  gulab jamun for the table, the festival, or simply because
+                  Thursday asked for it.
                 </p>
               </Reveal>
               <Reveal delay={0.15} className="mt-8">
@@ -101,7 +101,7 @@ export function SweetChapter() {
       </div>
 
       {/* Drifting product rail */}
-      <div ref={railRef} className="mt-16 sm:mt-24">
+      <div ref={railRef} className="mt-12 sm:mt-16">
         <motion.ul
           style={reduce ? undefined : { x: drift }}
           className="flex w-max gap-5 sm:gap-8"

@@ -13,19 +13,16 @@ export function BrandStatement() {
     <section
       id="one-name"
       aria-labelledby="one-name-heading"
-      className="relative overflow-hidden bg-ivory py-24 sm:py-32 lg:py-40"
+      className="relative overflow-hidden bg-ivory py-20 sm:py-28 lg:py-32"
     >
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-        <div className="grid items-center gap-16 lg:grid-cols-[1.15fr_1fr] lg:gap-8">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_1fr] lg:gap-8">
           {/* Statement */}
           <div className="relative">
-            <Reveal>
-              <p className="eyebrow-ink">One kitchen · every craving</p>
-            </Reveal>
             <MaskedLines
               as="h2"
               id="one-name-heading"
-              className="display-lg mt-6 font-serif font-medium text-ink"
+              className="display-lg font-serif font-medium text-ink"
               lines={[
                 "One name.",
                 <span key="cravings">
@@ -33,26 +30,11 @@ export function BrandStatement() {
                 </span>,
               ]}
             />
-            <Reveal delay={0.35} className="mt-8 max-w-md">
+            <Reveal delay={0.35} className="mt-7 max-w-md">
               <p className="lede text-ink-soft">
-                Restaurant favourites, mithai, bakery and namkeen — one familiar
-                roof in Bilaspur, two counters, and a menu that runs from breakfast
-                dosa to celebration cake.
+                Restaurant favourites, sweets, bakery and namkeen — across
+                Bilaspur.
               </p>
-            </Reveal>
-            <Reveal delay={0.45}>
-              <dl className="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-border pt-8">
-                {[
-                  ["02", "Outlets in Bilaspur"],
-                  ["29+", "Dishes on the menu"],
-                  ["04", "Kitchens, one name"],
-                ].map(([n, label]) => (
-                  <div key={label}>
-                    <dt className="font-serif text-3xl font-medium text-brand sm:text-4xl">{n}</dt>
-                    <dd className="mt-1.5 text-[11px] uppercase tracking-[0.16em] text-ink-soft">{label}</dd>
-                  </div>
-                ))}
-              </dl>
             </Reveal>
           </div>
 
@@ -63,7 +45,7 @@ export function BrandStatement() {
                 <figure className="arch-mask relative aspect-[3/4]">
                   <Image
                     src="/images/brand/thali-arch.jpg"
-                    alt="Vegetarian thali, studio concept photography"
+                    alt="Vegetarian thali (concept imagery)"
                     fill
                     sizes="(max-width: 1024px) 45vw, 22vw"
                     className="object-cover"
@@ -74,7 +56,7 @@ export function BrandStatement() {
                 <figure className="circle-mask relative aspect-square">
                   <Image
                     src="/images/brand/chaat-bowl.jpg"
-                    alt="Papdi chaat in an earthen bowl, studio concept photography"
+                    alt="Papdi chaat in an earthen bowl (concept imagery)"
                     fill
                     sizes="(max-width: 1024px) 45vw, 22vw"
                     className="object-cover"
@@ -87,7 +69,7 @@ export function BrandStatement() {
                 <figure className="circle-mask relative aspect-square">
                   <Image
                     src="/images/brand/dosa-roll.jpg"
-                    alt="Golden rolled dosa with chutneys, studio concept photography"
+                    alt="Golden rolled dosa with chutneys (concept imagery)"
                     fill
                     sizes="(max-width: 1024px) 45vw, 22vw"
                     className="object-cover"
@@ -98,7 +80,7 @@ export function BrandStatement() {
                 <figure className="arch-mask relative aspect-[3/4]">
                   <Image
                     src="/images/brand/cake-slice.jpg"
-                    alt="Cream cake slice, studio concept photography"
+                    alt="Cream cake slice (concept imagery)"
                     fill
                     sizes="(max-width: 1024px) 45vw, 22vw"
                     className="object-cover"

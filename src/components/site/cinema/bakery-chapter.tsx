@@ -6,17 +6,55 @@ import { Reveal } from "@/components/shared/reveal";
 
 /**
  * 05 — BAKERY. A change of visual tempo
- * Cream, whitespace, directional light. Related to the brand, quieter than
- * the chapters around it — proof the platform can hold many product worlds.
+ * Bright, clean, soft daylight. One large hero cake image plus two smaller
+ * editorial crops (pastry + cookies) — calmer than SWEET, product-focused.
+ * No standard 4-card grid.
  */
 export function BakeryChapter() {
   return (
-    <section aria-labelledby="bakery-heading" className="bg-parchment py-24 sm:py-32">
+    <section aria-labelledby="bakery-heading" className="bg-parchment py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
-        <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+        <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+          {/* Large hero + two small crops */}
+          <div className="order-1 grid grid-cols-[1fr_38%] grid-rows-[auto_auto] gap-4 sm:gap-5 lg:order-2">
+            <Reveal variant="mask" className="col-span-1 row-span-2">
+              <figure className="soft-mask relative aspect-[4/5] sm:aspect-[3/4]">
+                <Image
+                  src="/images/bakery/bakery-wide.jpg"
+                  alt="Cream cake and pastries on marble (concept imagery)"
+                  fill
+                  sizes="(max-width: 1024px) 60vw, 32vw"
+                  className="object-cover"
+                />
+              </figure>
+            </Reveal>
+            <Reveal variant="mask" delay={0.12} className="col-start-2 row-start-1">
+              <figure className="soft-mask relative aspect-square">
+                <Image
+                  src="/images/items/pineapple-pastry.jpg"
+                  alt="Pineapple pastry (concept imagery)"
+                  fill
+                  sizes="(max-width: 1024px) 24vw, 13vw"
+                  className="object-cover"
+                />
+              </figure>
+            </Reveal>
+            <Reveal variant="mask" delay={0.22} className="col-start-2 row-start-2">
+              <figure className="soft-mask relative aspect-square">
+                <Image
+                  src="/images/items/chocolate-chip-cookies.jpg"
+                  alt="Chocolate chip cookies (concept imagery)"
+                  fill
+                  sizes="(max-width: 1024px) 24vw, 13vw"
+                  className="object-cover"
+                />
+              </figure>
+            </Reveal>
+          </div>
+
           <div className="order-2 lg:order-1">
             <Reveal>
-              <p className="eyebrow-ink">Chapter three</p>
+              <p className="eyebrow-ink">From the bakery</p>
             </Reveal>
             <MaskedLines
               as="h2"
@@ -24,14 +62,13 @@ export function BakeryChapter() {
               className="display-lg mt-4 font-serif font-medium text-ink"
               lines={["Bakery."]}
             />
-            <Reveal delay={0.25} className="mt-7 max-w-md">
+            <Reveal delay={0.25} className="mt-6 max-w-md">
               <p className="lede text-ink-soft">
-                Soft, fresh and quietly indulgent — cream cakes, pastries and
-                cookies from the bakery counter. Order a slice today, or plan a
-                cake for Saturday.
+                Cream cakes, pastries and cookies — soft, bright and quietly
+                indulgent. Slice today, or plan a cake for the next celebration.
               </p>
             </Reveal>
-            <Reveal delay={0.35} className="mt-10 flex flex-wrap items-center gap-x-10 gap-y-6">
+            <Reveal delay={0.35} className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-5">
               <Link
                 href="/bakery"
                 className="group inline-flex items-center gap-4 font-serif text-2xl font-medium text-ink transition-colors hover:text-brand"
@@ -47,31 +84,6 @@ export function BakeryChapter() {
               >
                 Enquire about a cake
               </Link>
-            </Reveal>
-          </div>
-
-          <div className="order-1 grid grid-cols-[1fr_38%] items-end gap-4 sm:gap-6 lg:order-2">
-            <Reveal variant="mask">
-              <figure className="soft-mask relative aspect-[4/3]">
-                <Image
-                  src="/images/bakery/bakery-wide.jpg"
-                  alt="Cream cake and pastries on marble, clean editorial styling (concept imagery)"
-                  fill
-                  sizes="(max-width: 1024px) 60vw, 38vw"
-                  className="object-cover"
-                />
-              </figure>
-            </Reveal>
-            <Reveal variant="mask" delay={0.15}>
-              <figure className="soft-mask mb-0 aspect-[3/4] sm:mb-10">
-                <Image
-                  src="/images/bakery/bakery-tall.jpg"
-                  alt="Layered pastry with linen and marble (concept imagery)"
-                  fill
-                  sizes="(max-width: 1024px) 30vw, 16vw"
-                  className="object-cover"
-                />
-              </figure>
             </Reveal>
           </div>
         </div>

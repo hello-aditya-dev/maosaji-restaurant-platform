@@ -20,14 +20,14 @@ const COURSES = [
   {
     id: "north-indian",
     label: "North Indian",
-    line: "Slow gravies, fresh rotis, paneer done properly.",
+    line: "Paneer, gravies and the everyday classics.",
     image: "/images/eat/sticky-curry.jpg",
     alt: "Paneer butter masala in a copper handi (concept imagery)",
   },
   {
     id: "south-indian",
     label: "South Indian",
-    line: "Dosas off the griddle, idlis steamed to order.",
+    line: "Dosas, idlis and chutneys from the south.",
     image: "/images/eat/sticky-dosa.jpg",
     alt: "Masala dosa with chutneys on a banana leaf (concept imagery)",
   },
@@ -39,7 +39,7 @@ const COURSES = [
     alt: "Vegetarian thali on a brass plate (concept imagery)",
   },
   {
-    id: "chaat",
+    id: "chaat-snacks",
     label: "Chaat & Snacks",
     line: "Crisp, tangy, finished under a snowfall of sev.",
     image: "/images/eat/sticky-chaat.jpg",
@@ -74,7 +74,7 @@ export function EatChapter() {
   }, [reduce]);
 
   return (
-    <section aria-labelledby="eat-heading" className="bg-ivory py-24 sm:py-32">
+    <section aria-labelledby="eat-heading" className="bg-ivory py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
         <div className="flex flex-wrap items-end justify-between gap-8">
           <div>
@@ -90,19 +90,19 @@ export function EatChapter() {
           </div>
           <Reveal delay={0.2} className="max-w-xs pb-3">
             <p className="font-serif text-xl italic leading-snug text-ink-soft">
-              Plated hot, through the day.
+              The restaurant, the heart of the menu.
             </p>
           </Reveal>
         </div>
 
-        <div className="mt-14 grid gap-12 sm:mt-20 lg:grid-cols-[1fr_42%] lg:gap-16">
+        <div className="mt-12 grid gap-10 sm:mt-16 lg:grid-cols-[42%_1fr] lg:gap-14">
           {/* Copy progression */}
           <div ref={listRef} className="order-2 lg:order-1">
             {COURSES.map((course, i) => (
               <div
                 key={course.id}
                 data-course={course.id}
-                className="scroll-mt-28 border-t border-border py-8 first:border-t-0 first:pt-0 sm:py-10 lg:py-14"
+                className="scroll-mt-28 border-t border-border py-7 first:border-t-0 first:pt-0 sm:py-9 lg:py-11"
               >
                 <Reveal variant="fade">
                   <div className="flex items-baseline gap-6">
@@ -172,14 +172,11 @@ export function EatChapter() {
                   </figure>
                 </div>
               ))}
-              <p className="absolute -bottom-7 right-0 text-[10px] uppercase tracking-[0.22em] text-ink-soft/60">
-                Concept imagery
-              </p>
             </div>
           </div>
         </div>
 
-        <Reveal className="mt-16 border-t border-border pt-10 sm:mt-20">
+        <Reveal className="mt-12 border-t border-border pt-8 sm:mt-16">
           <Link
             href="/menu"
             className="group inline-flex items-center gap-4 font-serif text-2xl font-medium text-ink transition-colors hover:text-brand sm:text-3xl"

@@ -7,7 +7,6 @@ import { ArrowRight, Search, X } from "lucide-react";
 import { MaskedLines } from "./masked-lines";
 import { Reveal } from "@/components/shared/reveal";
 import { VegBadge } from "@/components/shared/veg-badge";
-import { PriceTag } from "@/components/shared/price-tag";
 import { AddToOrderButton } from "@/components/menu/add-to-order-button";
 import { track } from "@/lib/analytics";
 
@@ -34,8 +33,15 @@ export function MenuDiscovery({ items }: { items: DiscoveryItem[] }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const trimmed = query.trim().toLowerCase();
 
+  // Curated representative preview — a real Maosaji spread incl. a sweet.
+  // Preferred-slug order ensures the 8-card preview always covers thali,
+  // dosa, paneer, dal, chaat AND a mithai (kaju-katli) regardless of seed order.
+  const PREFERRED = [
+    "maosaji-thali", "supreme-thali", "masala-dosa", "maosaji-special-dosa",
+    "paneer-butter-masala", "dal-makhni", "pav-bhaji", "kaju-katli",
+  ];
   const featured = useMemo(
-    () => items.filter((i) => i.isFeatured).slice(0, 8),
+    () => PREFERRED.map((s) => items.find((i) => i.slug === s)).filter(Boolean).slice(0, 8) as DiscoveryItem[],
     [items],
   );
 
@@ -62,7 +68,7 @@ export function MenuDiscovery({ items }: { items: DiscoveryItem[] }) {
   const searching = trimmed.length >= 2;
 
   return (
-    <section aria-labelledby="craving-heading" className="bg-ivory py-24 sm:py-32">
+    <section aria-labelledby="craving-heading" className="bg-ivory py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
         <div className="max-w-2xl">
           <Reveal>
@@ -71,13 +77,13 @@ export function MenuDiscovery({ items }: { items: DiscoveryItem[] }) {
           <MaskedLines
             as="h2"
             id="craving-heading"
-            className="display-md mt-4 font-serif font-medium text-ink"
+            className="display-md mt-3 font-serif font-medium text-ink"
             lines={["What are you craving?"]}
           />
         </div>
 
-        {/* Search — utility mode begins here */}
-        <Reveal delay={0.2} className="mt-10 max-w-xl">
+        {/* Search — utility mode begins here; tightened so brand→utility reads as one beat */}
+        <Reveal delay={0.18} className="mt-6 max-w-xl">
           <form
             role="search"
             onSubmit={(e) => {
@@ -128,7 +134,7 @@ export function MenuDiscovery({ items }: { items: DiscoveryItem[] }) {
         </Reveal>
 
         {/* Results / featured grid */}
-        <ul className="mt-12 grid grid-cols-2 gap-x-5 gap-y-10 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-7">
+        <ul className="mt-8 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 lg:grid-cols-4 lg:gap-x-7">
           {results.slice(0, 8).map((item, i) => (
             <Reveal as="li" variant="fade" delay={(i % 4) * 0.06} key={item.id}>
               <article className="group">
@@ -153,7 +159,12 @@ export function MenuDiscovery({ items }: { items: DiscoveryItem[] }) {
                     <p className="mt-0.5 text-[11px] uppercase tracking-[0.14em] text-ink-soft/70">
                       {item.categorySlug.replace(/-/g, " ")}
                     </p>
-                    <PriceTag priceCents={item.priceCents} className="mt-2 text-xs" />
+                    <Link
+                      href={`/menu?q=${encodeURIComponent(item.name.split(" ").slice(0, 2).join(" "))}`}
+                      className="quiet-link mt-2 inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-brand"
+                    >
+                      View item <ArrowRight className="h-3 w-3" aria-hidden="true" />
+                    </Link>
                   </div>
                   <AddToOrderButton
                     item={{ slug: item.slug, name: item.name, categorySlug: item.categorySlug, imageUrl: item.imageUrl }}
@@ -187,7 +198,7 @@ export function MenuDiscovery({ items }: { items: DiscoveryItem[] }) {
           </Reveal>
         )}
 
-        <Reveal className="mt-14 border-t border-border pt-10">
+        <Reveal className="mt-12 border-t border-border pt-8">
           <Link
             href={searching ? `/menu?q=${encodeURIComponent(query.trim())}` : "/menu"}
             className="group inline-flex items-center gap-4 font-serif text-2xl font-medium text-ink transition-colors hover:text-brand sm:text-3xl"
@@ -197,9 +208,6 @@ export function MenuDiscovery({ items }: { items: DiscoveryItem[] }) {
               <ArrowRight className="h-5 w-5" aria-hidden="true" />
             </span>
           </Link>
-          <p className="mt-3 text-xs text-ink-soft/70">
-            Availability and outlets update live from the kitchen.
-          </p>
         </Reveal>
       </div>
     </section>

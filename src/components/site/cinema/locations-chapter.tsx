@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { restaurant } from "@/config/restaurant";
 import { MaskedLines } from "./masked-lines";
 import { Reveal } from "@/components/shared/reveal";
@@ -13,7 +13,7 @@ import { TrackedAnchor } from "@/components/site/location-card";
  */
 export function LocationsChapter() {
   return (
-    <section aria-labelledby="locations-heading" className="bg-ivory py-24 sm:py-32">
+    <section aria-labelledby="locations-heading" className="bg-ivory py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-5 sm:px-8 lg:px-12">
         <div className="flex flex-wrap items-end justify-between gap-8">
           <div>
@@ -24,18 +24,17 @@ export function LocationsChapter() {
               as="h2"
               id="locations-heading"
               className="display-md mt-4 font-serif font-medium text-ink"
-              lines={["Two outlets.", "One city."]}
+              lines={["Two places.", "One Maosaji."]}
             />
           </div>
           <Reveal delay={0.2} className="max-w-xs pb-2">
             <p className="text-[15px] leading-relaxed text-ink-soft">
-              Srikant Verma Marg and Mangla Chowk — same kitchen spirit, same
-              menu breadth.
+              Srikant Verma Marg and Mangla Chowk — each with its own menu, both under one name.
             </p>
           </Reveal>
         </div>
 
-        <div className="mt-14 space-y-20 sm:mt-20 sm:space-y-28">
+        <div className="mt-8 space-y-12 sm:mt-10 sm:space-y-16">
           {restaurant.locations.map((loc, i) => {
             const mirrored = i % 2 === 1;
             return (
@@ -82,21 +81,25 @@ export function LocationsChapter() {
                         {loc.address}
                       </p>
                     </Reveal>
-                    <Reveal delay={0.15} className="mt-8 flex flex-wrap items-center gap-x-8 gap-y-4">
+                    <Reveal delay={0.15} className="mt-8 flex flex-wrap items-center gap-3">
                       <TrackedAnchor
                         href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`Maosaji ${loc.name}, ${loc.address}`)}`}
                         eventName="directions_click"
                         payload={{ from: "homepage", location: loc.slug }}
-                        className="group inline-flex items-center gap-3 font-serif text-lg font-medium text-ink transition-colors hover:text-brand"
+                        className="group inline-flex items-center gap-2.5 rounded-full border border-ink/20 bg-card px-5 py-2.5 text-sm font-semibold text-ink transition-all duration-300 hover:border-brand hover:bg-brand hover:text-parchment"
                       >
+                        <MapPin className="h-4 w-4" aria-hidden="true" />
                         Get directions
-                        <span className="flex h-10 w-10 items-center justify-center rounded-full border border-ink/20 transition-all duration-300 group-hover:border-brand group-hover:bg-brand group-hover:text-parchment">
-                          <ArrowUpRight className="h-4 w-4" aria-hidden="true" />
-                        </span>
                       </TrackedAnchor>
                       <Link
+                        href={`/menu?outlet=${loc.slug}`}
+                        className="inline-flex items-center rounded-full border border-ink/20 bg-card px-5 py-2.5 text-sm font-semibold text-ink transition-all duration-300 hover:border-brand hover:bg-brand hover:text-parchment"
+                      >
+                        View menu
+                      </Link>
+                      <Link
                         href={`/order?outlet=${loc.slug}`}
-                        className="quiet-link text-[11px] font-semibold uppercase tracking-[0.22em] text-ink"
+                        className="inline-flex items-center rounded-full border border-brand bg-brand px-5 py-2.5 text-sm font-semibold text-parchment transition-all duration-300 hover:bg-brand-deep"
                       >
                         Order from here
                       </Link>
