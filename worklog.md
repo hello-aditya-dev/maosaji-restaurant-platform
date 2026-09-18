@@ -195,3 +195,47 @@ Stage Summary:
 - Visual Experience Override: COMPLETE — no acceptance test weakened, all demo flows verified
 - Unresolved: GitHub push requires a valid token from the user (everything else done)
 - Next-phase recommendations: replace concept imagery with owner photography (see MEDIA_PLAN.md production checklist), owner story intake, Supabase swap via DataProvider, real admin auth before any production use
+
+---
+Task ID: 5
+Agent: main (Z.ai Code)
+Task: GitHub push with fresh PAT + Vercel deployment readiness (zero errors)
+
+Work Log:
+- Validated the new GitHub PAT (belongs to hello-aditya-dev — same account the remote expected)
+- FULL TYPE-CLEAN PASS: `bunx tsc --noEmit` = 0 errors (was 20). Fixes:
+  * enquiries route: discriminated-union narrowing — contact branch has no eventDate (`data.type === "contact" ? null : ...`)
+  * never-narrowing in item-sheet/menu-experience/order-drawer: `loc.shortName ?? loc.name` with `as const` config narrows loc to never (shortName is non-nullable literal) → new `locationLabel()` helper in restaurant.ts with internal widening cast (rebrand-safe fallback kept)
+  * MaskedLines: added `id` prop (10 chapter anchors: #eat-heading, #locations-heading, … verified live in DOM)
+  * locations-chapter TrackedAnchor: `event`/`props` → `eventName`/`payload` — REAL BUG: directions_click was silently untracked; now verified end-to-end (DB shows directions_click: 1 after click → Google Maps)
+  * navbar: widened literal-union href comparison
+  * tsconfig: exclude tooling dirs (skills/, .zscripts/, build-pack/, …) — 2 skills errors gone
+- SERVERLESS-SAFE DATA LAYER (the core Vercel blocker):
+  * New src/lib/data-provider/memory-provider.ts — DEMO_MODE_MEMORY: in-memory DataProvider seeded identically to SQLite (globalThis-cached, survives HMR)
+  * New src/lib/seed-constants.ts — pure seed data extracted (no Prisma import chain); seed-data.ts re-exports + keeps ensureSeeded (both providers seed from ONE source)
+  * Provider factory: canUseSqlitePersistence() = DATABASE_URL set && VERCEL !== 1 → demoProvider, else memoryProvider (fresh clone without .env also just works now)
+  * db.ts: query logs dev-only (['error'] in production)
+- VERCEL BUILD/DEPLOY HYGIENE:
+  * package.json: `postinstall: prisma generate`; `build` = plain `next build` (Vercel-pure); standalone output moved to opt-in `build:standalone` (BUILD_STANDALONE=1); `start` = `next start`
+  * next.config: REMOVED typescript.ignoreBuildErrors (build now type-checks for real); `output: standalone` conditional; allowedDevOrigins for the preview proxy
+  * middleware.ts → proxy.ts (Next 16 convention; X-Robots-Tag verified still applied; deprecation warning gone)
+  * Untracked .env from git (was committed with absolute path); added .env.example (documenting DATABASE_URL/ADMIN_DEMO_PASSCODE/ADMIN_SESSION_SECRET/Supabase placeholders); untracked dev.log.bak-2c; .gitignore `!.env.example`
+  * README: new "Deploying on Vercel" section (zero-config, env var table), corrected item count 28, seed-constants refs
+- VERIFICATION (all PASS):
+  * Memory-provider unit test under VERCEL=1 + no DATABASE_URL: mode selection, 10 categories/28 items/2 locations/1 offer, enquiry lifecycle (CO-2026-0004 sequence continues), status update, menu mutations, settings, analytics counts
+  * PRODUCTION BUILD SIMULATION in /tmp hard-linked copy (Vercel-like: no .env, VERCEL=1, type-check ON): `next build` exit 0 — 37 routes (dynamic + static)
+  * PRODUCTION RUNTIME: `next start` :3001 — ALL 19 spot-checked routes 200, zero warnings; /api/menu serves mode:"DEMO_MODE_MEMORY"; contact POST → reference CO-2026-0004; admin login demo2026 → authed enquiries show the submission; analytics tracked
+  * Sandbox dev server (SQLite DEMO_MODE preserved): GET / 200, X-Robots-Tag present, proxy.ts active
+  * agent-browser live QA: menu search "dosa" → item sheet "ORDER THIS ITEM — SVM" + verified Zomato link; order drawer outlet buttons (locationLabel) render "SVM / Srikant Verma Marg" / "Mangla / Mangla Chowk"; homepage Get directions → Google Maps + event in DB; contact form → Thank you + CO-2026-0004; admin dashboard shows CO-2026-0004 LIVE; mobile 390px renders with bottom nav; sticky footer structurally correct (min-h-screen flex-col + flex-1 main + mt-auto footer)
+  * `bun run lint` = exit 0
+- GITHUB PUSH (previously blocked — token was revoked):
+  * Created PRIVATE repo hello-aditya-dev/maosaji-restaurant-platform via API (201)
+  * Pushed main with all 6 commits (5af528e → 29d7985); token used one-time inline, remote URL kept clean (no secret persisted)
+  * Verified via API: default_branch=main, private=true, all commits present
+- Verified webDevReview cron job 395111 alive (every 15 min, Asia/Calcutta, correct payload; last tick hit a transient model-concurrency limit — self-heals next tick)
+
+Stage Summary:
+- GitHub: PUSHED — https://github.com/hello-aditya-dev/maosaji-restaurant-platform (private)
+- Vercel: ZERO-CONFIG DEPLOYABLE — verified by full build + runtime simulation under Vercel conditions; degrades to DEMO_MODE_MEMORY (never 500s on missing DB); type-check is honest (no ignoreBuildErrors)
+- All previous acceptance-test flows re-verified live with zero regressions; directions_click analytics bug found & fixed in the process
+- Next-phase recommendations: none blocking. Optional: replace concept imagery with owner photography (MEDIA_PLAN.md checklist), Supabase provider implementation when credentials exist, real admin auth before production.
